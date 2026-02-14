@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Forever With You ❤️</title>
+    <title>Special Moment ❤️</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
@@ -13,151 +13,151 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: url("background.jpg") no-repeat center center/cover;
+            background: radial-gradient(circle at top, #1a1a2e, #000);
         }
 
-        /* Dark overlay */
         body::before {
             content: "";
             position: absolute;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.6);
-            z-index: 0;
-        }
-
-        .stars {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            background: transparent;
-            box-shadow:
-                50px 100px white,
-                200px 150px white,
-                400px 80px white,
-                600px 200px white,
-                800px 120px white,
-                1000px 300px white;
-            animation: twinkle 2s infinite alternate;
-            z-index: 1;
-        }
-
-        @keyframes twinkle {
-            from { opacity: 0.3; }
-            to { opacity: 1; }
+            background: rgba(0,0,0,0.5);
         }
 
         .container {
             position: relative;
             z-index: 2;
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(8px);
+            text-align: center;
+            color: white;
+            background: rgba(255,255,255,0.05);
             padding: 40px;
             border-radius: 20px;
-            color: white;
-            text-align: center;
-            width: 90%;
-            max-width: 400px;
+            backdrop-filter: blur(10px);
         }
 
         h1 {
-            font-size: 26px;
+            font-size: 28px;
         }
 
         .buttons {
-            margin-top: 25px;
+            margin-top: 30px;
             position: relative;
             height: 120px;
         }
 
         button {
-            padding: 12px 25px;
+            padding: 12px 30px;
             font-size: 16px;
             border-radius: 30px;
             border: none;
             cursor: pointer;
             margin: 10px;
-            transition: 0.3s;
+            position: relative;
+            transition: 0.3s ease;
         }
 
         #yesBtn {
-            background: #ff4d6d;
+            background: #ff2e63;
             color: white;
+            box-shadow: 0 0 10px #ff2e63;
+        }
+
+        #yesBtn:hover {
+            box-shadow: 0 0 25px #ff2e63, 0 0 50px #ff2e63;
+            transform: scale(1.1);
         }
 
         #noBtn {
-            background: gray;
+            background: #444;
             color: white;
             position: absolute;
+            box-shadow: 0 0 10px #999;
+        }
+
+        #noBtn:hover {
+            box-shadow: 0 0 20px #999;
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
         }
 
         .heart {
             position: fixed;
+            bottom: 0;
             color: pink;
-            font-size: 20px;
-            animation: floatUp 4s linear forwards;
+            font-size: 18px;
+            animation: floatUp 6s linear forwards;
+            opacity: 0.8;
         }
 
         @keyframes floatUp {
-            from { transform: translateY(0); opacity: 1; }
-            to { transform: translateY(-600px); opacity: 0; }
-        }
-
-        .ring {
-            position: fixed;
-            top: -100px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 60px;
-            animation: drop 2s ease forwards;
-            z-index: 3;
-        }
-
-        @keyframes drop {
-            to { top: 40%; }
+            from { transform: translateY(0); }
+            to { transform: translateY(-700px); opacity: 0; }
         }
     </style>
 </head>
 
 <body>
 
-<div class="stars"></div>
-
 <div class="container">
-    <h1 id="question">Will You Marry Me? 💖</h1>
+    <h1 id="question">Will You Be Mine Forever? 💖</h1>
 
     <div class="buttons">
-        <button id="yesBtn">Yes 💍</button>
+        <button id="yesBtn">Yes ❤️</button>
         <button id="noBtn">No 😅</button>
     </div>
 
     <div id="message"></div>
 </div>
 
-<audio id="music">
-    <source src="love.mp3" type="audio/mp3">
-</audio>
+<canvas id="canvas"></canvas>
 
 <script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
     const yesBtn = document.getElementById("yesBtn");
     const noBtn = document.getElementById("noBtn");
     const message = document.getElementById("message");
-    const question = document.getElementById("question");
-    const music = document.getElementById("music");
+    const container = document.querySelector(".buttons");
 
-    // Smooth escape
+    // Keep NO inside container
+    noBtn.style.left = "150px";
+    noBtn.style.top = "0px";
+
     document.addEventListener("mousemove", (e) => {
         const rect = noBtn.getBoundingClientRect();
         const distance = Math.hypot(
-            e.clientX - (rect.left + rect.width/2),
-            e.clientY - (rect.top + rect.height/2)
+            e.clientX - (rect.left + rect.width / 2),
+            e.clientY - (rect.top + rect.height / 2)
         );
 
-        if (distance < 100) {
-            const x = Math.random() * (window.innerWidth - 100);
-            const y = Math.random() * (window.innerHeight - 50);
-            noBtn.style.left = x + "px";
-            noBtn.style.top = y + "px";
+        if (distance < 90) {
+            let currentLeft = parseFloat(noBtn.style.left);
+            let currentTop = parseFloat(noBtn.style.top);
+
+            let moveX = (rect.left < e.clientX) ? -80 : 80;
+            let moveY = (rect.top < e.clientY) ? -40 : 40;
+
+            let newLeft = currentLeft + moveX;
+            let newTop = currentTop + moveY;
+
+            const maxLeft = container.offsetWidth - noBtn.offsetWidth;
+            const maxTop = container.offsetHeight - noBtn.offsetHeight;
+
+            if (newLeft < 0) newLeft = 0;
+            if (newLeft > maxLeft) newLeft = maxLeft;
+            if (newTop < 0) newTop = 0;
+            if (newTop > maxTop) newTop = maxTop;
+
+            noBtn.style.left = newLeft + "px";
+            noBtn.style.top = newTop + "px";
         }
     });
 
@@ -167,28 +167,63 @@
         heart.classList.add("heart");
         heart.innerHTML = "💖";
         heart.style.left = Math.random() * window.innerWidth + "px";
-        heart.style.bottom = "0px";
         document.body.appendChild(heart);
 
-        setTimeout(() => {
-            heart.remove();
-        }, 4000);
+        setTimeout(() => heart.remove(), 6000);
+    }
+    setInterval(createHeart, 800);
+
+    // FIREWORK PARTICLES
+    let particles = [];
+
+    function createFirework(x, y) {
+        for (let i = 0; i < 80; i++) {
+            particles.push({
+                x: x,
+                y: y,
+                speedX: (Math.random() - 0.5) * 6,
+                speedY: (Math.random() - 0.5) * 6,
+                radius: 2,
+                alpha: 1,
+                color: `hsl(${Math.random() * 360},100%,60%)`
+            });
+        }
     }
 
-    setInterval(createHeart, 500);
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // YES click
+        particles.forEach((p, index) => {
+            p.x += p.speedX;
+            p.y += p.speedY;
+            p.alpha -= 0.01;
+
+            ctx.globalAlpha = p.alpha;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            ctx.fillStyle = p.color;
+            ctx.fill();
+
+            if (p.alpha <= 0) {
+                particles.splice(index, 1);
+            }
+        });
+
+        requestAnimationFrame(animate);
+    }
+    animate();
+
     yesBtn.addEventListener("click", () => {
-        music.play();
-        question.style.display = "none";
+        message.innerHTML = "<h2>Yayyyy ❤️🎉</h2>";
 
-        message.innerHTML = "<h2>She Said YESSSS ❤️🎉</h2>";
-
-        // Ring drop
-        const ring = document.createElement("div");
-        ring.classList.add("ring");
-        ring.innerHTML = "💍";
-        document.body.appendChild(ring);
+        for (let i = 0; i < 6; i++) {
+            setTimeout(() => {
+                createFirework(
+                    Math.random() * canvas.width,
+                    Math.random() * canvas.height / 2
+                );
+            }, i * 400);
+        }
     });
 </script>
 
