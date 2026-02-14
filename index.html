@@ -1,47 +1,117 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Gurusamy | Developer</title>
+    <title>Special Question ❤️</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <style>
         body {
             margin: 0;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: url("https://images.unsplash.com/photo-1501785888041-af3ef285b470") no-repeat center center/cover;
             font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #1f4037, #99f2c8);
-            color: white;
-            text-align: center;
         }
+
         .container {
-            padding: 100px 20px;
+            text-align: center;
+            background: rgba(0,0,0,0.6);
+            padding: 40px;
+            border-radius: 20px;
+            color: white;
         }
+
         h1 {
-            font-size: 50px;
+            font-size: 40px;
         }
-        p {
-            font-size: 20px;
+
+        .buttons {
+            margin-top: 30px;
+            position: relative;
         }
-        .btn {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 12px 25px;
-            background: white;
-            color: #1f4037;
-            text-decoration: none;
-            border-radius: 25px;
-            font-weight: bold;
+
+        button {
+            padding: 12px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            margin: 10px;
+            transition: 0.2s;
         }
-        .btn:hover {
-            background: #eee;
+
+        #yesBtn {
+            background-color: #28a745;
+            color: white;
+        }
+
+        #noBtn {
+            background-color: #dc3545;
+            color: white;
+            position: absolute;
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
         }
     </style>
 </head>
+
 <body>
 
 <div class="container">
-    <h1>Hello, I'm Gurusamy 👋</h1>
-    <p>SQL Developer | Python Automation | Data Enthusiast</p>
-    <a href="https://github.com/" class="btn">View My GitHub</a>
+    <h1>Do You Like This Surprise? 😍</h1>
+
+    <div class="buttons">
+        <button id="yesBtn">Yes ❤️</button>
+        <button id="noBtn">No 😅</button>
+    </div>
 </div>
+
+<canvas id="fireworks"></canvas>
+
+<script>
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const canvas = document.getElementById("fireworks");
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // NO BUTTON RUN AWAY
+    noBtn.addEventListener("mouseover", () => {
+        const x = Math.random() * (window.innerWidth - 100);
+        const y = Math.random() * (window.innerHeight - 50);
+        noBtn.style.left = x + "px";
+        noBtn.style.top = y + "px";
+    });
+
+    // FIREWORKS
+    function createFirework() {
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height;
+        const radius = Math.random() * 3 + 2;
+        const color = `hsl(${Math.random() * 360}, 100%, 50%)`;
+
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.fillStyle = color;
+        ctx.fill();
+    }
+
+    yesBtn.addEventListener("click", () => {
+        for (let i = 0; i < 300; i++) {
+            createFirework();
+        }
+    });
+</script>
 
 </body>
 </html>
