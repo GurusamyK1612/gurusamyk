@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Special Question ❤️</title>
+    <title>Forever With You ❤️</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
@@ -9,107 +9,186 @@
             margin: 0;
             height: 100vh;
             overflow: hidden;
+            font-family: 'Segoe UI', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: url("https://images.unsplash.com/photo-1501785888041-af3ef285b470") no-repeat center center/cover;
-            font-family: Arial, sans-serif;
+            background: url("background.jpg") no-repeat center center/cover;
+        }
+
+        /* Dark overlay */
+        body::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 0;
+        }
+
+        .stars {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            box-shadow:
+                50px 100px white,
+                200px 150px white,
+                400px 80px white,
+                600px 200px white,
+                800px 120px white,
+                1000px 300px white;
+            animation: twinkle 2s infinite alternate;
+            z-index: 1;
+        }
+
+        @keyframes twinkle {
+            from { opacity: 0.3; }
+            to { opacity: 1; }
         }
 
         .container {
-            text-align: center;
-            background: rgba(0,0,0,0.6);
+            position: relative;
+            z-index: 2;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(8px);
             padding: 40px;
             border-radius: 20px;
             color: white;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
         }
 
         h1 {
-            font-size: 40px;
+            font-size: 26px;
         }
 
         .buttons {
-            margin-top: 30px;
+            margin-top: 25px;
             position: relative;
+            height: 120px;
         }
 
         button {
-            padding: 12px 30px;
-            font-size: 18px;
-            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
             border-radius: 30px;
+            border: none;
             cursor: pointer;
             margin: 10px;
-            transition: 0.2s;
+            transition: 0.3s;
         }
 
         #yesBtn {
-            background-color: #28a745;
+            background: #ff4d6d;
             color: white;
         }
 
         #noBtn {
-            background-color: #dc3545;
+            background: gray;
             color: white;
             position: absolute;
         }
 
-        canvas {
+        .heart {
             position: fixed;
-            top: 0;
-            left: 0;
-            pointer-events: none;
+            color: pink;
+            font-size: 20px;
+            animation: floatUp 4s linear forwards;
+        }
+
+        @keyframes floatUp {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(-600px); opacity: 0; }
+        }
+
+        .ring {
+            position: fixed;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 60px;
+            animation: drop 2s ease forwards;
+            z-index: 3;
+        }
+
+        @keyframes drop {
+            to { top: 40%; }
         }
     </style>
 </head>
 
 <body>
 
+<div class="stars"></div>
+
 <div class="container">
-    <h1>Do You Like This Surprise? 😍</h1>
+    <h1 id="question">Will You Marry Me? 💖</h1>
 
     <div class="buttons">
-        <button id="yesBtn">Yes ❤️</button>
+        <button id="yesBtn">Yes 💍</button>
         <button id="noBtn">No 😅</button>
     </div>
+
+    <div id="message"></div>
 </div>
 
-<canvas id="fireworks"></canvas>
+<audio id="music">
+    <source src="love.mp3" type="audio/mp3">
+</audio>
 
 <script>
-    const noBtn = document.getElementById("noBtn");
     const yesBtn = document.getElementById("yesBtn");
-    const canvas = document.getElementById("fireworks");
-    const ctx = canvas.getContext("2d");
+    const noBtn = document.getElementById("noBtn");
+    const message = document.getElementById("message");
+    const question = document.getElementById("question");
+    const music = document.getElementById("music");
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    // Smooth escape
+    document.addEventListener("mousemove", (e) => {
+        const rect = noBtn.getBoundingClientRect();
+        const distance = Math.hypot(
+            e.clientX - (rect.left + rect.width/2),
+            e.clientY - (rect.top + rect.height/2)
+        );
 
-    // NO BUTTON RUN AWAY
-    noBtn.addEventListener("mouseover", () => {
-        const x = Math.random() * (window.innerWidth - 100);
-        const y = Math.random() * (window.innerHeight - 50);
-        noBtn.style.left = x + "px";
-        noBtn.style.top = y + "px";
+        if (distance < 100) {
+            const x = Math.random() * (window.innerWidth - 100);
+            const y = Math.random() * (window.innerHeight - 50);
+            noBtn.style.left = x + "px";
+            noBtn.style.top = y + "px";
+        }
     });
 
-    // FIREWORKS
-    function createFirework() {
-        const x = Math.random() * canvas.width;
-        const y = Math.random() * canvas.height;
-        const radius = Math.random() * 3 + 2;
-        const color = `hsl(${Math.random() * 360}, 100%, 50%)`;
+    // Floating hearts
+    function createHeart() {
+        const heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.innerHTML = "💖";
+        heart.style.left = Math.random() * window.innerWidth + "px";
+        heart.style.bottom = "0px";
+        document.body.appendChild(heart);
 
-        ctx.beginPath();
-        ctx.arc(x, y, radius, 0, Math.PI * 2);
-        ctx.fillStyle = color;
-        ctx.fill();
+        setTimeout(() => {
+            heart.remove();
+        }, 4000);
     }
 
+    setInterval(createHeart, 500);
+
+    // YES click
     yesBtn.addEventListener("click", () => {
-        for (let i = 0; i < 300; i++) {
-            createFirework();
-        }
+        music.play();
+        question.style.display = "none";
+
+        message.innerHTML = "<h2>She Said YESSSS ❤️🎉</h2>";
+
+        // Ring drop
+        const ring = document.createElement("div");
+        ring.classList.add("ring");
+        ring.innerHTML = "💍";
+        document.body.appendChild(ring);
     });
 </script>
 
