@@ -87,6 +87,7 @@
             left: 0;
             pointer-events: none;
         }
+        
 
         .heart {
             position: fixed;
@@ -118,6 +119,9 @@
 </div>
 
 <canvas id="canvas"></canvas>
+    <audio id="bgMusic" preload="auto">
+    <source src="love.mp3" type="audio/mpeg">
+</audio>
 
 <script>
     const canvas = document.getElementById("canvas");
@@ -237,20 +241,23 @@
     // ===============================
     // YES BUTTON FIREWORK SHOW
     // ===============================
-    yesBtn.addEventListener("click", () => {
+   yesBtn.addEventListener("click", () => {
 
-        message.innerHTML = "<h2>Yayyyyy ❤️🎉</h2>";
+    const music = document.getElementById("bgMusic");
+    music.volume = 0.7;
+    music.play();
 
-        // Multiple cinematic bursts
-        for (let i = 0; i < 10; i++) {
-            setTimeout(() => {
-                createFirework(
-                    Math.random() * canvas.width,
-                    Math.random() * canvas.height / 2
-                );
-            }, i * 250);
-        }
-    });
+    message.innerHTML = "<h2>Yayyyyy ❤️🎉</h2>";
+
+    for (let i = 0; i < 10; i++) {
+        setTimeout(() => {
+            createFirework(
+                Math.random() * canvas.width,
+                Math.random() * canvas.height / 2
+            );
+        }, i * 250);
+    }
+});
 </script>
 
 
